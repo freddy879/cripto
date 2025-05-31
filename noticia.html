@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calendario Económico</title>
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+        }
+        header {
+            background-color: #333;
+            color: #FFF;
+            width: 100%;
+            padding: 15px 0;
+            text-align: center;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            position: fixed;
+            top: 0;
+            z-index: 1000;
+        }
+        nav ul {
+            display: flex;
+            justify-content: center;
+            padding: 0;
+            list-style: none;
+            margin: 0;
+        }
+        nav ul li {
+            margin: 0 20px;
+            position: relative;
+        }
+        nav ul li a {
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+            transition: color 0.3s;
+        }
+        nav ul li a:hover {
+            color: #ffcc00;
+        }
+        nav ul li .dropdown-menu {
+            display: none;
+            position: absolute;
+            background-color: #fff;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            padding: 10px 0;
+            border-radius: 4px;
+            top: 100%;
+            left: 0;
+            min-width: 200px;
+            z-index: 2000;
+        }
+        nav ul li .dropdown-item {
+            padding: 10px 20px;
+            color: #333;
+            text-decoration: none;
+            display: block;
+            font-weight: bold;
+        }
+        nav ul li .dropdown-item:hover {
+            background-color: #f0f2f5;
+        }
+        nav ul li:hover .dropdown-menu {
+            display: block;
+        }
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin-top: 100px;
+            background: #fff;
+            padding: 20px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+            display: flex;
+            justify-content: space-between;
+        }
+        .calendar-container {
+            width: 70%;
+        }
+        .alarm-container {
+            width: 25%;
+            background: #fff;
+            padding: 20px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .alarm-form {
+            width: 100%;
+            margin-bottom: 20px;
+        }
+        .alarm-form input,
+        .alarm-form textarea {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        .alarm-form button {
+            width: 100%;
+            padding: 10px;
+            border: none;
+            border-radius: 4px;
+            background-color: #333;
+            color: #FFF;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        .alarm-list {
+            width: 100%;
+            margin-top: 10px;
+        }
+        .alarm-item {
+            border: 1px solid #ccc;
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 4px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .alarm-item h3 {
+            margin: 0;
+        }
+        .alarm-item button {
+            background-color: red;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        footer {
+            background-color: #333;
+            color: #FFF;
+            width: 100%;
+            padding: 15px 0;
+            text-align: center;
+            position: fixed;
+            bottom: 0;
+            z-index: 1000;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav>
+          <ul class="navbar-nav">
+            <li class="nav-item">
+                <a class="nav-link" href="cripto.html">CRIPTOMONEDAS</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="grafico.html"> GRAFICO</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="noticia.html"> NOTICIAS</a>
+            </li>
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="portfolioDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">PORTAFOLIO</a>
+                <div class="dropdown-menu" aria-labelledby="portfolioDropdown">
+                    <a class="dropdown-item" href="Portsfolio.html">Portafolio</a>
+                    <a class="dropdown-item" href="Portafolioc.html">calculo</a>
+                </div>
+            </li>
+        </ul>
+        </nav>
+    </header>
+
+    <div class="container">
+        <div class="calendar-container">
+            <div id="economic_calendar"></div>
+            <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-events.js">
+                new TradingView.widget({
+                    "container_id": "economic_calendar",  // Contenedor donde se insertará el widget
+                    "width": "100%",
+                    "height": "600",
+                    "colorTheme": "light",
+                    "isTransparent": false,
+                    "locale": "es"
+                });
+            </script>
+        </div>
+        <div class="alarm-container">
+            <h2>Configurar Alarma</h2>
+            <form class="alarm-form" id="alarmForm">
+                <input type="text" id="alarmTitle" placeholder="Título de la Alarma" required>
+                <input type="date" id="alarmDate" required>
+                <input type="time" id="alarmTime" required>
+                <button type="submit">Agregar Alarma</button>
+            </form>
+            <div class="alarm-list" id="alarmList"></div>
+            <audio id="alarmSound" src="https://www.epidemicsound.com/sound-effects/tracks/e68b7c80-9400-4c1a-9b05-b15b437a744b/" preload="auto"></audio> <!-- Enlace a un sonido de ejemplo -->
+        </div>
+    </div>
+    <script>
+        document.getElementById('alarmForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const title = document.getElementById('alarmTitle').value.trim();
+            const date = document.getElementById('alarmDate').value.trim();
+            const time = document.getElementById('alarmTime').value.trim();
+    
+            if (title && date && time) {
+                const alarmTime = new Date(`${date}T${time}`);
+                if (alarmTime > new Date()) {
+                    addAlarmItem(title, date, time);
+                } else {
+                    alert('Por favor, selecciona una fecha y hora futura.');
+                }
+            } else {
+                alert('Todos los campos son obligatorios.');
+            }
+        });
+    
+        function addAlarmItem(title, date, time) {
+            const alarmItem = document.createElement('div');
+            alarmItem.classList.add('alarm-item');
+    
+            const alarmTitle = document.createElement('h3');
+            alarmTitle.textContent = title;
+    
+            const alarmDatetime = document.createElement('p');
+            alarmDatetime.textContent = `Fecha: ${date}, Hora: ${time}`;
+    
+            const deleteButton = document.createElement('button');
+            deleteButton.textContent = 'X';
+            deleteButton.addEventListener('click', () => {
+                alarmItem.remove();
+            });
+    
+            alarmItem.appendChild(alarmTitle);
+            alarmItem.appendChild(alarmDatetime);
+            alarmItem.appendChild(deleteButton);
+    
+            document.getElementById('alarmList').appendChild(alarmItem);
+    
+            document.getElementById('alarmForm').reset();
+    
+            // Configurar la alarma
+            const alarmTime = new Date(`${date}T${time}`);
+            const now = new Date();
+            const timeToAlarm = alarmTime - now;
+    
+            if (timeToAlarm > 0) {
+                setTimeout(() => {
+                    document.getElementById('alarmSound').play();
+                    alert(`¡Alarma! ${title}`);
+                }, timeToAlarm);
+            }
+        }
+    </script>
+    
+
+</body>
+</html>

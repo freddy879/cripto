@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rik Ross</title>
+    <link rel="stylesheet" href="cripto.css">
+    <script src="https://kit.fontawesome.com/16454e4b22.js" crossorigin="anonymous"></script>
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #FFFF;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            color: #333;
+        }
+        
+        header {
+            background-color: #333;
+            color: #FFFF;
+            padding: 20px;
+            text-align: center;
+            width: 100%;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            position: fixed;
+            top: 0;
+            z-index: 1000;
+        }
+        
+        header h1 {
+            margin: 0;
+            font-size: 2em;
+            text-transform: uppercase;
+        }
+        
+        nav ul {
+            display: flex;
+            justify-content: center;
+            padding: 0;
+            list-style: none;
+            margin: 0;
+        }
+        
+        nav ul li {
+            margin: 0 20px;
+            position: relative;
+        }
+        
+        nav ul li a {
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+            transition: color 0.3s;
+        }
+        
+        nav ul li a:hover {
+            color: #ffcc00;
+        }
+        
+        nav ul li .dropdown-menu {
+            display: none;
+            position: absolute;
+            background-color: #fff;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            padding: 10px 0;
+            border-radius: 4px;
+            top: 100%;
+            left: 0;
+            min-width: 200px;
+            z-index: 2000;
+        }
+        
+        nav ul li .dropdown-item {
+            padding: 10px 20px;
+            color: #333;
+            text-decoration: none;
+            display: block;
+            font-weight: bold;
+        }
+        
+        nav ul li .dropdown-item:hover {
+            background-color: #f0f2f5;
+        }
+        
+        nav ul li:hover .dropdown-menu {
+            display: block;
+        }
+        
+        main {
+            margin-top: 100px;
+            width: 90%;
+            max-width: 1200px;
+            flex: 1;
+        }
+        
+        #precios {
+            width: 100%;
+            padding: 20px;
+        }
+        
+        #search {
+            width: 50%;
+            padding: 10px;
+            margin: 20px auto; /* Margen superior de 20px y centrado horizontal */
+            border: 1px solid #131212;
+            border-radius: 20px;
+            font-size: 16px;
+            display: block; /* Asegura que sea un elemento de bloque */
+        }
+        
+        
+        #suggestions {
+            background: #FFFF;
+            border: 1px solid #FFFF;
+            border-radius: 4px;
+            max-height: 200px;
+            overflow-y: auto;
+            position: absolute;
+            width: calc(100% - 40px);
+            z-index: 1001;
+        }
+        
+        #suggestions div {
+            padding: 10px;
+            cursor: pointer;
+        }
+        
+        #suggestions div:hover {
+            background-color: #FFFF;
+        }
+        
+        #crypto-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        
+        #crypto-table th, #crypto-table td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid #FFFF;
+        }
+        
+        #crypto-table th {
+            background-color: #FFFF;
+            text-transform: uppercase;
+            font-weight: bold;
+        }
+        
+        #crypto-table tbody tr:nth-child(even) {
+            background-color: #FFFF;
+        }
+        
+        .crypto-logo {
+            width: 32px;
+            height: 32px;
+        }
+        
+        .pagination {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+        
+        .pagination button {
+            padding: 10px;
+            margin: 0 5px;
+            background-color: #333;
+            color: #FFFF;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        
+        .pagination button:hover {
+            background-color: #555;
+        }
+        
+        footer {
+            background-color: #333;
+            color: #FFFF;
+            text-align: center;
+            padding: 20px;
+            width: 100%;
+        }
+        
+        /* Adaptación para dispositivos móviles */
+        @media (max-width: 768px) {
+            header, nav ul, section {
+                width: 100%;
+            }
+        
+            nav ul {
+                flex-direction: column;
+            }
+        
+            nav ul li {
+                margin: 10px 0;
+            }
+        
+            table, th, td {
+                display: block;
+                width: 100%;
+            }
+        
+            th, td {
+                text-align: right;
+                position: relative;
+                padding-left: 50%;
+            }
+        
+            th::before, td::before {
+                position: absolute;
+                left: 10px;
+                width: 45%;
+                white-space: nowrap;
+            }
+        
+            th::before {
+                content: attr(data-title);
+            }
+        
+            td::before {
+                content: attr(data-label);
+            }
+        }
+        
+    </style>
+
+</head>
+<body>
+    <header>
+        <nav>
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link" href="cripto.html">CRIPTOMONEDAS</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="grafico.html"> GRAFICO</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="noticia.html"> NOTICIAS</a>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="portfolioDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">PORTAFOLIO</a>
+                    <div class="dropdown-menu" aria-labelledby="portfolioDropdown">
+                        <a class="dropdown-item" href="Portsfolio.html">Portafolio</a>
+                        <a class="dropdown-item" href="Portafolioc.html">calculo</a>
+                    </div>
+                </li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <section id="precios">
+            <input type="text" id="search" placeholder="Buscar criptomoneda...">
+            <div id="suggestions" class="suggestions"></div>
+            <table id="crypto-table">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Simbolo</th>
+                        <th>Name</th>
+                        <th>Precio</th>
+                        <th>1H%</th>
+                        <th>4H%</th>
+                        <th>1D%</th>
+                        <th>Capitalización de Mercado (USD)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Los datos se agregarán aquí dinámicamente -->
+                </tbody>
+            </table>
+            <div class="pagination">
+                <button id="prevPage">Anterior</button>
+                <button id="nextPage">Siguiente</button>
+            </div>
+        </section>
+    </main>
+   <script>
+    const cryptoSymbols = [
+    "bitcoin", "ethereum", "tether", "solana", "binancecoin", "ripple", 
+    "dogecoin", "usd-coin", "cardano", "tron", "polkadot", "litecoin", 
+    "chainlink", "bitcoin-cash", "stellar", "vechain", "terra-luna", 
+    "cosmos", "filecoin", "tezos", "theta-token", "avalanche-2", 
+    "aave", "uniswap", "algorand", "elrond-erd-2", "compound", 
+    "maker", "dai", "dash", "zcash", "yearn-finance", "sushiswap", 
+    "waves", "hedera-hashgraph", "decred", "iota", "nem", "thorchain", 
+    "okb", "fantom", "kusama", "huobi-token", "bittorrent", "ocean-protocol", 
+    "holo", "enjincoin", "revain", "bancor", "ampl", "curve-dao-token", 
+    "ren", "reserve-rights-token", "numeraire", "skale", "fetch-ai", 
+    "chiliz", "safemoon", "ankr", "celo", "near", "nexo", "storj", 
+    "arweave", "fei-protocol", "origin-protocol", "reef", "mdex", 
+    "tokemak", "astrafer", "pluton", "pangolin", "hedge-protocol", 
+    "celer-network", "alchemy-pay", "paxos-standard", "coti", "barnbridge", 
+    "smooth-love-potion", "frax", "vai", "venus", "woo-network", "kava", 
+    "immutable-x", "playdapp", "medibloc", "stasis-eurs", "stratis", 
+    "iotex", "rally", "lcx", "metahero", "qash", "polymath", "coinmetro", 
+    "tokocrypto", "vulcan-forged", "radicle", "unifi-protocol-dao", "sifchain", "gala"
+];
+
+let currentPage = 1;
+const itemsPerPage = 50;
+let filteredCryptoData = [];
+let fullCryptoData = [];
+const popularCryptos = ["bitcoin", "ethereum", "ripple", "litecoin", "binancecoin"]; // Criptomonedas más populares
+
+document.addEventListener('DOMContentLoaded', () => {
+    fetchCryptoData();
+    document.getElementById('prevPage').addEventListener('click', () => changePage(-1));
+    document.getElementById('nextPage').addEventListener('click', () => changePage(1));
+    document.getElementById('search').addEventListener('input', filterCryptos);
+    document.getElementById('search').addEventListener('focus', showPopularCryptos);
+    document.addEventListener('click', (event) => {
+        if (!event.target.closest('#search') && !event.target.closest('#suggestions')) {
+            document.getElementById('suggestions').style.display = 'none';
+        }
+    });
+    setInterval(() => fetchCryptoData(), 3600000); // Actualizar precios cada hora
+});
+
+async function fetchCryptoData() {
+    const url = `https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&ids=${cryptoSymbols.join(',')}&order=market_cap_desc&per_page=${cryptoSymbols.length}&page=1&sparkline=false&price_change_percentage=1h,4h,24h`;
+
+    try {
+        const response = await fetch(url);
+        const data = await response.json();
+        fullCryptoData = data;
+        filteredCryptoData = fullCryptoData;
+        displayCryptoData();
+    } catch (error) {
+        console.error('Error fetching data:', error);
+    }
+}
+
+function displayCryptoData() {
+    const cryptoTable = document.getElementById('crypto-table').getElementsByTagName('tbody')[0];
+    cryptoTable.innerHTML = ''; // Limpiar datos anteriores
+
+    const startIndex = (currentPage - 1) * itemsPerPage;
+    const endIndex = startIndex + itemsPerPage;
+
+    filteredCryptoData.slice(startIndex, endIndex).forEach((crypto, index) => {
+        const row = document.createElement('tr');
+        
+        const numberCell = document.createElement('td');
+        numberCell.textContent = startIndex + index + 1;
+
+        const logoCell = document.createElement('td');
+        const logoImg = document.createElement('img');
+        logoImg.src = crypto.image;
+        logoImg.alt = `${crypto.name} logo`;
+        logoImg.classList.add('crypto-logo');
+        logoCell.appendChild(logoImg);
+
+        const nameCell = document.createElement('td');
+        nameCell.textContent = crypto.name;
+        nameCell.classList.add('crypto-name');
+        nameCell.dataset.id = crypto.id;
+
+        const priceCell = document.createElement('td');
+        priceCell.textContent = `$${crypto.current_price}`;
+
+        const change1hCell = document.createElement('td');
+        change1hCell.textContent = `${crypto.price_change_percentage_1h_in_currency?.toFixed(2)}%`;
+        change1hCell.style.color = crypto.price_change_percentage_1h_in_currency >= 0 ? 'green' : 'red';
+
+        const change4hCell = document.createElement('td');
+        change4hCell.textContent = crypto.price_change_percentage_4h_in_currency ? `${crypto.price_change_percentage_4h_in_currency.toFixed(2)}%` : 'N/A';
+        change4hCell.style.color = crypto.price_change_percentage_4h_in_currency >= 0 ? 'green' : 'red';
+
+        const change1dCell = document.createElement('td');
+        change1dCell.textContent = `${crypto.price_change_percentage_24h_in_currency?.toFixed(2)}%`;
+        change1dCell.style.color = crypto.price_change_percentage_24h_in_currency >= 0 ? 'green' : 'red';
+
+        const marketCapCell = document.createElement('td');
+        marketCapCell.textContent = `$${crypto.market_cap.toLocaleString()}`;
+
+        row.appendChild(numberCell);
+        row.appendChild(logoCell);
+        row.appendChild(nameCell);
+        row.appendChild(priceCell);
+        row.appendChild(change1hCell);
+        row.appendChild(change4hCell);
+        row.appendChild(change1dCell);
+        row.appendChild(marketCapCell);
+
+        row.addEventListener('click', () => {
+            window.location.href = `crypto-details.html?id=${crypto.id}`;
+        });
+        
+        cryptoTable.appendChild(row);
+    });
+
+    updatePaginationControls();
+}
+
+function updatePaginationControls() {
+    const prevButton = document.getElementById('prevPage');
+    const nextButton = document.getElementById('nextPage');
+
+    prevButton.disabled = currentPage === 1;
+    nextButton.disabled = currentPage * itemsPerPage >= filteredCryptoData.length;
+}
+
+function changePage(direction) {
+    currentPage += direction;
+    displayCryptoData();
+}
+
+function filterCryptos() {
+    const searchValue = document.getElementById('search').value.toLowerCase();
+    filteredCryptoData = fullCryptoData.filter(crypto =>
+        crypto.name.toLowerCase().includes(searchValue) ||
+        crypto.symbol.toLowerCase().includes(searchValue)
+    );
+    displaySuggestions(searchValue);
+    currentPage = 1; // Reset to the first page
+    displayCryptoData();
+}
+
+function displaySuggestions(searchValue) {
+    const suggestions = document.getElementById('suggestions');
+    suggestions.innerHTML = '';
+
+    const filteredSuggestions = fullCryptoData.filter(crypto =>
+        crypto.name.toLowerCase().startsWith(searchValue) ||
+        crypto.symbol.toLowerCase().startsWith(searchValue)
+    );
+
+    filteredSuggestions.forEach(crypto => {
+        const suggestionItem = document.createElement('div');
+        suggestionItem.textContent = crypto.name;
+        suggestionItem.addEventListener('click', () => {
+            window.location.href = `crypto-details.html?id=${crypto.id}`;
+        });
+        suggestions.appendChild(suggestionItem);
+    });
+
+    suggestions.style.display = 'block';
+}
+
+function showPopularCryptos() {
+    const suggestions = document.getElementById('suggestions');
+    suggestions.innerHTML = '';
+
+    popularCryptos.forEach(symbol => {
+        const crypto = fullCryptoData.find(c => c.id === symbol);
+        if (crypto) {
+            const suggestionItem = document.createElement('div');
+            suggestionItem.textContent = crypto.name;
+            suggestionItem.addEventListener('click', () => {
+                window.location.href = `crypto-details.html?id=${crypto.id}`;
+            });
+            suggestions.appendChild(suggestionItem);
+        }
+    });
+
+    suggestions.style.display = 'block';
+}
+
+   </script>
+  
+</body>
+</html>
